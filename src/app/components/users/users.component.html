@@ -1,0 +1,59 @@
+<h1>Users page</h1>
+<div *ngFor="let user of users">
+  <h3>{{user.name}}  {{user.surname | reversestr: 'Hello' }}</h3> <!-- richiamo quello che c'è nel ngOnInit() -->
+  <ul *ngIf="showDetails">
+    <li>{{user.email}}</li>
+    <li>{{user.birthdate | date: 'dd/mm/yyyy'}}</li>
+  </ul>
+
+  <button [disabled]="!isEnabled">Submit</button>
+</div>
+
+<div>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <div class="mb-3">
+      <label for="exampleInputName" class="form-label">Name</label>
+      <input
+        [(ngModel)]="user.name"
+        name = "name"
+        required
+        minlength="2"
+        #inputName = "ngModel"
+        [ngClass] = "{ 'is-invalid' : inputName.errors && inputName.touched }"
+        type="text" class="form-control" id="exampleInputName">
+      <div class="invalid-feedback">
+        Please insert a valid name.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleInputSurname" class="form-label">Surname</label>
+      <input
+        [(ngModel)]="user.surname"
+        name = "surname"
+        type="text"
+        class="form-control" id="exampleInputSurname">
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleInputEmail" class="form-label">Email</label>
+      <input
+        [(ngModel)]="user.email"
+        name = "email"
+        required
+        pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+        #inputEmail = "ngModel"
+        type="email"
+        [ngClass] = "{ 'is-invalid' : inputEmail.errors && inputEmail.touched }"
+        class="form-control" id="exampleInputEmail">
+      <div class="invalid-feedback">
+        Please insert a valid email.
+      </div>
+    </div>
+
+    <button [disabled]="!userForm.form.valid"
+      (click)="addNewUser()" type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<!-- <button (click)="fireEvent($event)" type="button" [ngClass]="currentClass" class="btn">Add User</button> -->
